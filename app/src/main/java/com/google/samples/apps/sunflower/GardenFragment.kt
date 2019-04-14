@@ -35,6 +35,7 @@ class GardenFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //Fragment와 xml 을 binding
         val binding = FragmentGardenBinding.inflate(inflater, container, false)
         val adapter = GardenPlantingAdapter()
         binding.gardenList.adapter = adapter
@@ -43,14 +44,16 @@ class GardenFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: GardenPlantingAdapter, binding: FragmentGardenBinding) {
+        //ViewModelFactory로 ViewModel 얻어서
         val factory = InjectorUtils.provideGardenPlantingListViewModelFactory(requireContext())
         val viewModel = ViewModelProviders.of(this, factory)
                 .get(GardenPlantingListViewModel::class.java)
-
+        //lifecycle을 observe를 통해 item이 있는지 확인
         viewModel.gardenPlantings.observe(viewLifecycleOwner, Observer { plantings ->
             binding.hasPlantings = !plantings.isNullOrEmpty()
         })
 
+        // list에 넣기?
         viewModel.plantAndGardenPlantings.observe(viewLifecycleOwner, Observer { result ->
             if (!result.isNullOrEmpty())
                 adapter.submitList(result)

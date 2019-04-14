@@ -31,6 +31,24 @@ import com.google.samples.apps.sunflower.databinding.FragmentPlantListBinding
 import com.google.samples.apps.sunflower.utilities.InjectorUtils
 import com.google.samples.apps.sunflower.viewmodels.PlantListViewModel
 
+//recycleview 관련 용어
+/*
+Adapter: RecyclerView.Adapter의 subclass로 data set에 있는 item을 나타내게하는 view를 제공하는 책임
+Position: Adapter내에 있는 data item의 position
+Index : getChildAt(int) 호출에 사용하는 attached child view의 index
+Binding : adapter내에 position에 관련된 data를 표시하기 위해서 child view를 준비하는 과정
+Recycle : 지정한 adapeter position에 대해서 data를 표시하기 위해 이전에 사용한 view를 cache에 넣어서 나중에 다시 동일한 type data를 보여주는데 재사용
+Scrap: layout에서 임시로 detached state로 진입하는 child view. rebinding이 필요하지 않은 경우 parent RecyclerVidew에서 완전히 detached하지 않고도 재사용이 가능.
+Dirty : 표시하기 전에 adapter로 rebound 해야만 하는 child view
+ */
+/*
+ViewModel
+ * Activity가 너무 많은 일을 하니까 이를 나눈다.
+ * Activity : UI그리기, 사용자 입력 수신
+ * ViewModel : UI Data 보유
+ * Repository : app data를 저장 및 로딩
+ * Presenter : UI를 위한 data 처리
+ */
 class PlantListFragment : Fragment() {
 
     private lateinit var viewModel: PlantListViewModel
@@ -40,12 +58,15 @@ class PlantListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //Fragment와 xml을 binding
         val binding = FragmentPlantListBinding.inflate(inflater, container, false)
         val context = context ?: return binding.root
 
+        //ViewModelFactory로 ViewModel 얻기
         val factory = InjectorUtils.providePlantListViewModelFactory(context)
         viewModel = ViewModelProviders.of(this, factory).get(PlantListViewModel::class.java)
 
+        // adapeter를 binding
         val adapter = PlantAdapter()
         binding.plantList.adapter = adapter
         subscribeUi(adapter)

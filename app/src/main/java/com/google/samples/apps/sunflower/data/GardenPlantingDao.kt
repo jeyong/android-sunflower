@@ -23,6 +23,23 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 
+/*
+data를 보유하는 class로 observable 속성을 가짐.
+LiveData vs. 일반 observable 차이
+ * lifecycle 인지 : activity, fragment, service와 같은 app component의 lifecycle과 연동
+ * active lifecycle 상태에서만 update를 통보한다.
+ * LifecycleOwner와 함께 사용해서 DESTROYED로 변경되는 경우 subscribe를 하지 않음 -> memory leak 방지
+
+장점 :
+ * UI와 data 상태 매칭
+ * memory leak 방지
+ * 정지된 activity에 의한 crash 방지
+ * 수동으로 lifecycle 처리하지 않아도 됨
+ * 항상 최신 data로 업데이트
+ * activity 새로 생성되는 경우에도 최신 data로 업데이트
+ * resource 공유
+*/
+
 /**
  * The Data Access Object for the [GardenPlanting] class.
  */

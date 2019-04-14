@@ -49,10 +49,12 @@ class PlantDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //ViewModelFactory로 ViewModel 얻기
         val factory = InjectorUtils.providePlantDetailViewModelFactory(requireActivity(), args.plantId)
         val plantDetailViewModel = ViewModelProviders.of(this, factory)
                 .get(PlantDetailViewModel::class.java)
 
+        //
         val binding = DataBindingUtil.inflate<FragmentPlantDetailBinding>(
                 inflater, R.layout.fragment_plant_detail, container, false).apply {
             viewModel = plantDetailViewModel

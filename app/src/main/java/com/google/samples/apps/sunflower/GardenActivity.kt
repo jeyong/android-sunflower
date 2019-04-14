@@ -31,6 +31,10 @@ import com.google.samples.apps.sunflower.databinding.ActivityGardenBinding
 
 class GardenActivity : AppCompatActivity() {
 
+    //lateinit
+    // null이 아닌 property의 경우 생성자에서 초기화해야만 한다.
+    // dependency injection에 의해서 초기화되는 property의 경우나 unittest의 setup method. 이런 경우에는 생성자에서 non-null 초기화가 불가능.
+
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
@@ -38,6 +42,7 @@ class GardenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // binding은 activity와 layout을 연결
         val binding: ActivityGardenBinding = DataBindingUtil.setContentView(this,
                 R.layout.activity_garden)
         drawerLayout = binding.drawerLayout
@@ -45,6 +50,7 @@ class GardenActivity : AppCompatActivity() {
         navController = Navigation.findNavController(this, R.id.garden_nav_fragment)
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
 
+        //appbar와 menu 설정
         // Set up ActionBar
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -53,12 +59,13 @@ class GardenActivity : AppCompatActivity() {
         binding.navigationView.setupWithNavController(navController)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
+    //action bar에서 activity hierarchy 내부에 Up을 navigate할 때마다 호출
+    override fun onSupportNavigateUp(): Boolean { //up 버튼은 화면 상단 왼쪽의 'back' 아이콘 버 https://developer.android.com/training/implementing-navigation/ancestral
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) { //open state인지 보고 open이면 close 시켜주기
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
